@@ -1,24 +1,46 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+
+import Header from "./components/layout/Header";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchUser } from "./redux/slice/userSlice";
+import { Outlet } from "react-router-dom";
+import Footer from "./components/layout/Footer";
+import { fetchSeller } from "./redux/slice/sellerSlice";
+import { fetchAllProduct } from "./redux/slice/allProductSlice";
+import Loader from "./components/layout/Loader";
+import { fetchAllEvent } from "./redux/slice/allEventSlice";
 
 function App() {
+  const dispatch = useDispatch();
+  const { isAuthenticate: useAuthenticate } = useSelector(
+    (state) => state.loginUser
+  );
+  const { isAuthenticate: sellerAuthenticate } = useSelector(
+    (state) => state.seller
+  );
+  const { loading, fetched } = useSelector(
+    (state) => state.allProduct
+  );
+  const {
+    loading: eventloading,
+    fetched: eventfetched,
+  } = useSelector((state) => state.allEvent);
+
+  useEffect(() => {
+    !useAuthenticate && dispatch(fetchUser());
+    !sellerAuthenticate && dispatch(fetchSeller());
+    !fetched && dispatch(fetchAllProduct());
+    !eventfetched && dispatch(fetchAllEvent());
+  }, [dispatch, useAuthenticate, sellerAuthenticate, fetched, eventfetched]);
+
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <Header />
+      {loading || eventloading ? <Loader /> : <Outlet />}
+      <Footer />
+    </>
   );
 }
 
