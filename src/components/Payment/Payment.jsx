@@ -2,13 +2,13 @@ import React, { useEffect, useState } from "react";
 import styles from "../../styles/styles";
 import { useDispatch, useSelector } from "react-redux";
 // import { RxCross1 } from "react-icons/rx";
-import {
-  // CardCvcElement,
-  // CardExpiryElement,
-  CardNumberElement,
-  useElements,
-  useStripe,
-} from "@stripe/react-stripe-js";
+// import {
+//   CardCvcElement,
+//   CardExpiryElement,
+//   CardNumberElement,
+//   useElements,
+//   useStripe,
+// } from "@stripe/react-stripe-js";
 import axios from "axios";
 import { server } from "../../server";
 import { toast } from "react-hot-toast";
@@ -19,8 +19,8 @@ const Payment = () => {
   const [orderData, setOrderData] = useState([]);
   const [open, setOpen] = useState(false);
   const { user } = useSelector((state) => state.loginUser);
-  const stripe = useStripe();
-  const elements = useElements();
+  // const stripe = useStripe();
+  // const elements = useElements();
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -41,59 +41,59 @@ const Payment = () => {
   const onApprove = async (data, actions) => {};
   // const paypalPaymentHandler = async (paymentInfo) => {};
 
-  const paymentData = {
-    amount: Math.round(orderData?.totalPrice * 100),
-  };
+  // const paymentData = {
+  //   amount: Math.round(orderData?.totalPrice * 100),
+  // };
 
   // Currently This is not working
-  const paymentHandler = async (e) => {
-    e.preventDefault();
-    try {
-      const config = {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      };
-      const { data } = await axios.post(
-        `${server}/payment/process`,
-        paymentData,
-        config
-      );
+  // const paymentHandler = async (e) => {
+  //   e.preventDefault();
+  //   try {
+  //     const config = {
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //     };
+  //     const { data } = await axios.post(
+  //       `${server}/payment/process`,
+  //       paymentData,
+  //       config
+  //     );
 
-      const client_secret = data.client_secret;
+  //     const client_secret = data.client_secret;
 
-      if (!stripe || !elements) return;
-      const result = await stripe.confirmCardPayment(client_secret, {
-        payment_method: {
-          card: elements.getElement(CardNumberElement),
-        },
-      });
-      if (result.error) {
-        toast.error(result.error.message);
-      } else {
-        if (result.paymentIntent.status === "succeeded") {
-          order.paymnentInfo = {
-            id: result.paymentIntent.id,
-            status: result.paymentIntent.status,
-            type: "Credit Card",
-          };
-        }
-        await axios
-          .post(`${server}/order/create-order`, order, config)
-          .then((res) => {
-            setOpen(false);
-            navigate("/order/success");
-            toast.success("Order successful!");
-            localStorage.setItem("cartItems", JSON.stringify([]));
-            localStorage.setItem("latestOrder", JSON.stringify([]));
-          });
-      }
-    } catch (error) {
-      console.log(error);
-      console.log(error?.response?.data?.message);
-      toast.error("Something Went Wrong...");
-    }
-  };
+  //     if (!stripe || !elements) return;
+  //     const result = await stripe.confirmCardPayment(client_secret, {
+  //       payment_method: {
+  //         card: elements.getElement(CardNumberElement),
+  //       },
+  //     });
+  //     if (result.error) {
+  //       toast.error(result.error.message);
+  //     } else {
+  //       if (result.paymentIntent.status === "succeeded") {
+  //         order.paymnentInfo = {
+  //           id: result.paymentIntent.id,
+  //           status: result.paymentIntent.status,
+  //           type: "Credit Card",
+  //         };
+  //       }
+  //       await axios
+  //         .post(`${server}/order/create-order`, order, config)
+  //         .then((res) => {
+  //           setOpen(false);
+  //           navigate("/order/success");
+  //           toast.success("Order successful!");
+  //           localStorage.setItem("cartItems", JSON.stringify([]));
+  //           localStorage.setItem("latestOrder", JSON.stringify([]));
+  //         });
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //     console.log(error?.response?.data?.message);
+  //     toast.error("Something Went Wrong...");
+  //   }
+  // };
 
   const cashOnDeliveryHandler = async (e) => {
     e.preventDefault();
@@ -131,7 +131,7 @@ const Payment = () => {
             setOpen={setOpen}
             onApprove={onApprove}
             createOrder={createOrder}
-            paymentHandler={paymentHandler}
+            // paymentHandler={paymentHandler}
             cashOnDeliveryHandler={cashOnDeliveryHandler}
           />
         </div>
