@@ -22,18 +22,18 @@ const PaymentPage = () => {
   // }, []);
 
   return (
-    stripeApikey && (
-      <ProtectedRoute isAuthenticate={isAuthenticate}>
-        <div className="w-full min-h-screen bg-[#f6f9fc]">
-          <br />
-          <br />
-          <CheckoutSteps active={2} />
-          <Payment />
-          <br />
-          <br />
-        </div>
-      </ProtectedRoute>
-    )
+    // stripeApikey && (
+    <ProtectedRoute>
+      <div className="w-full min-h-screen bg-[#f6f9fc]">
+        <br />
+        <br />
+        <CheckoutSteps active={2} />
+        <Payment />
+        <br />
+        <br />
+      </div>
+    </ProtectedRoute>
+    // )
   );
 };
 
